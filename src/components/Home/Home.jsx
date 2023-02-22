@@ -124,8 +124,7 @@ const Home = () => {
     setIsLoading(false);
     setIsWalletDeployed(true);
     toast.success("Successfully Created Wallet!");
-    setTimeout(prefundWallet(address), 3000);
-    // prefundWallet(address);
+    prefundWallet(address);
   };
 
   const setModalStatus = (status) => {
