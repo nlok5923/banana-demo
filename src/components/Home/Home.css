@@ -4,14 +4,12 @@
 
 .wallet-btn {
     display: block;
-    margin: auto;
     padding: 20px 50px;
     color: #fff;
     border: none;
     border-radius: 40px;
     font-size: 16px;
     cursor: pointer;
-    margin-top: 50%;
     border: 2px solid black;
     color: black;
     font-size: 20px;
@@ -71,7 +69,7 @@
     margin-bottom: 20px;
     font-size: 16px;
     color: #333;
-    margin-top: 25%;
+    /* margin-top: 25%; */
     height: 6vh;
 }
 
@@ -87,4 +85,10 @@
     color: black;
     font-size: 14px;
     margin-top: 2.5%;
+}
+
+.staking-input-disc {
+    margin-top: 25%;
+    color: black;
+    font-size: 10px;
 }

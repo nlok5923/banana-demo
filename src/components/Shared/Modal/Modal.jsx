@@ -5,9 +5,8 @@ import { Modal, Button } from "antd";
 const WalletModal = (props) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const showModal = () => {
-    setOpen(true);
-  };
+  const [walletName, setWalletName] = useState('');
+
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
@@ -29,8 +28,8 @@ const WalletModal = (props) => {
         onCancel={handleCancel}
         style={{ textAlign:'center' }}
       >
-        <input className="wallet-identifier-input" placeholder="Wallet unique identifier" /> <br />
-        <button className="init-wallet-modal-btn">Init Wallet</button>
+        <input className="wallet-identifier-input" placeholder="Wallet unique identifier" onChange={(e) => setWalletName(e.target.value)} /> <br />
+        <button className="init-wallet-modal-btn" onClick={() => props.createWallet(walletName)} >Create Wallet</button>
       </Modal>
     </div>
   );
