@@ -64,7 +64,7 @@ const Home = () => {
       toast.success('Wait we are prefunding your wallet');
       setLoadingMessage("Funding you wallet...");
       setIsLoading(true);
-      const wallet = new ethers.Wallet(PRIVATE_KEY_EXPOSED, new ethers.providers.Web3Provider(window.ethereum));
+      const wallet = new ethers.Wallet(PRIVATE_KEY_EXPOSED, new ethers.providers.JsonRpcProvider('https://eth-goerli.g.alchemy.com/v2/V5p1PckEwUqIq5s5rA2zvwRKH0V9Hslr'));
       const txn = await wallet.sendTransaction(fundTxn);
       await txn.wait()
       console.log(txn);
@@ -204,41 +204,12 @@ const Home = () => {
                 <div className="staking">
                   <div className="staking-instructions">
                     <h1 className="staking-instructions-heading">
-                      Instructions
+                      Hurry! Get your Banana collectible NFT!
                     </h1>
-                    <ul>
-                      <li> Staking serves a similar function to mining, </li>
-                      <li>
-                        Cryptocurrencies are typically decentralized, meaning
-                        there is no central authority running the show.
-                      </li>
-                      <li>
-                        The network chooses validators (as they’re usually
-                        known) based on the size of their stake and the length
-                        of time{" "}
-                      </li>
-                      <li>
-                        We are the best staker and most trusted staking app in
-                        the market.
-                      </li>
-
-                      <li>
-                        Cryptocurrencies are typically decentralized, meaning
-                        there is no central authority running the show.
-                      </li>
-                      <li>
-                        The network chooses validators (as they’re usually
-                        known) based on the size of their stake and the length
-                        of time{" "}
-                      </li>
-                      <li>
-                        We are the best staker and most trusted staking app in
-                        the market.
-                      </li>
-                    </ul>
+                    <img className="nft-image" src="images/banana-dozen.jpeg" alt="Banana NFT"/>
                   </div>
                   <div className="staking-inputs">
-                    <p className="staking-input-disc">*We had prefunded your wallet to make txn</p>
+                    <p className="staking-input-disc">*We have prefunded your wallet to make txn</p>
                     {/* <input
                       placeholder="Enter amount to stake"
                       className="stake-input-field"
