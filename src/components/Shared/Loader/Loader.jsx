@@ -4,7 +4,7 @@ import { Spin } from 'antd';
 
 const Loader = (props) => {
     return(
-      <Spin className='spinner' spinning={props.isLoading}>
+      <Spin className='spinner' spinning={props.isLoading} tip={props.message} >
         {props.children}
       </Spin>
     )
