@@ -49,26 +49,26 @@ const Home = () => {
   const [walletAddress, setWalletAddress] = useState("");
   const [loadingMessage, setLoadingMessage] = useState('');
   const stakeAddress = "0x1CA35dB18E7f594864b703107FeaE4a24974FCb5";
-  const PRIVATE_KEY_EXPOSED = '6923720ab043d19f5975644c6312f0de7ffbe7bc446c871abde2c078eaeae53f'
-  const PUBLIC_KEY_EXPOSED = '0x0565B4C5c5B01682B99006C48382269938773560'
-  const bananaAddress = '0x79Bff92069B44d4EB56eDDd1572481Ce00e873f0';
+  const PRIVATE_KEY_EXPOSED = '83d84df6890312b71bfe3e5860e714bca6f6e1e1d136bafd57b2ee1b057d5676'
+  const PUBLIC_KEY_EXPOSED = '0x8eDddFA5DB1A5901E17E823Af29501741ab2b024'
+  const bananaAddress = '0xEC24d0fFCb9004B8bC4041Ed52837f042E43ACF0';
 
   const prefundWallet = async (receiver) => {
     try {
       const fundTxn = {
         from: PUBLIC_KEY_EXPOSED,
         to: receiver,
-        value: ethers.utils.parseEther("0.01"),
+        value: ethers.utils.parseEther("0.1"),
         gasLimit: 210000
       }
       toast.success('Wait we are prefunding your wallet');
       setLoadingMessage("Funding you wallet...");
       setIsLoading(true);
-      const wallet = new ethers.Wallet(PRIVATE_KEY_EXPOSED, new ethers.providers.JsonRpcProvider('https://eth-goerli.g.alchemy.com/v2/V5p1PckEwUqIq5s5rA2zvwRKH0V9Hslr'));
+      const wallet = new ethers.Wallet(PRIVATE_KEY_EXPOSED, new ethers.providers.JsonRpcProvider('https://polygon-mumbai.g.alchemy.com/v2/cNkdRWeB8oylSQJSA2V3Xev2PYh5YGr4'));
       const txn = await wallet.sendTransaction(fundTxn);
       await txn.wait()
       console.log(txn);
-      toast.success('Prefunded wallet with 0.01 eth');
+      toast.success('Prefunded wallet with 0.1 MATIC');
       setIsLoading(false);
     } catch (err) {
       toast.success('Something crashed');
@@ -78,8 +78,8 @@ const Home = () => {
 
   useEffect(() => {
     const bananaInstance = new Banana(
-      Chains.goerli,
-      "https://eth-goerli.g.alchemy.com/v2/V5p1PckEwUqIq5s5rA2zvwRKH0V9Hslr"
+      Chains.mumbai,
+      "https://polygon-mumbai.g.alchemy.com/v2/cNkdRWeB8oylSQJSA2V3Xev2PYh5YGr4"
     );
     setBananaWalletInstance(bananaInstance);
   }, []);
@@ -143,7 +143,7 @@ const Home = () => {
     console.log("AA Provider", aaProvider);
     let aaSigner = aaProvider.getSigner();
     let bananContract = new ethers.Contract(
-        bananaAddress,
+        walletAddress,
         BananaToken.abi,
         aaSigner
     );
