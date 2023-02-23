@@ -51,7 +51,7 @@ const Home = () => {
   const stakeAddress = "0x1CA35dB18E7f594864b703107FeaE4a24974FCb5";
   const PRIVATE_KEY_EXPOSED = '83d84df6890312b71bfe3e5860e714bca6f6e1e1d136bafd57b2ee1b057d5676'
   const PUBLIC_KEY_EXPOSED = '0x8eDddFA5DB1A5901E17E823Af29501741ab2b024'
-  const bananaAddress = '0xEC24d0fFCb9004B8bC4041Ed52837f042E43ACF0';
+  const bananaAddress = '0x4ccE86ebeAf7c764E71aDCd80DBDA1C1c55133Bb';
 
   const prefundWallet = async (receiver) => {
     try {
@@ -62,7 +62,7 @@ const Home = () => {
         gasLimit: 210000
       }
       toast.success('Wait we are prefunding your wallet');
-      setLoadingMessage("Funding you wallet...");
+      setLoadingMessage("Hold on! Funding you wallet...");
       setIsLoading(true);
       const wallet = new ethers.Wallet(PRIVATE_KEY_EXPOSED, new ethers.providers.JsonRpcProvider('https://polygon-mumbai.g.alchemy.com/v2/cNkdRWeB8oylSQJSA2V3Xev2PYh5YGr4'));
       const txn = await wallet.sendTransaction(fundTxn);
@@ -132,7 +132,7 @@ const Home = () => {
   };
 
   const stakeAfterAuth = async () => {
-    setLoadingMessage("Minting Banana NFT...");
+    setLoadingMessage("Minting Airdrop...");
     setIsLoading(true);
     const metaDataUri = {
         "name": "Banana Wallet Token",
@@ -143,25 +143,25 @@ const Home = () => {
     console.log("AA Provider", aaProvider);
     let aaSigner = aaProvider.getSigner();
     let bananContract = new ethers.Contract(
-        walletAddress,
+        bananaAddress,
         BananaToken.abi,
         aaSigner
     );
-    let dataUri = await Axios({
-        method: "post",
-        url: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
-        data: JSON.stringify(metaDataUri),
-        headers: {
-            'pinata_api_key': '5dbd25d2575c28d30c75',
-            'pinata_secret_api_key': '31e6245d30d45e928d0bdc05fec2b83914663311976825e465d1a57fa1af5c7c',
-            "Content-Type": "Application/json"
-        },
-    });
-    dataUri = 'https://gateway.pinata.cloud/ipfs/' + dataUri.data.IpfsHash;
-    console.log(" This is data Uri: ", dataUri);
+    // let dataUri = await Axios({
+    //     method: "post",
+    //     url: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
+    //     data: JSON.stringify(metaDataUri),
+    //     headers: {
+    //         'pinata_api_key': '5dbd25d2575c28d30c75',
+    //         'pinata_secret_api_key': '31e6245d30d45e928d0bdc05fec2b83914663311976825e465d1a57fa1af5c7c',
+    //         "Content-Type": "Application/json"
+    //     },
+    // });
+    // dataUri = 'https://gateway.pinata.cloud/ipfs/' + dataUri.data.IpfsHash;
+    // console.log(" This is data Uri: ", dataUri);
     const mintingCallData = bananContract.interface.encodeFunctionData(
-        "safeMint",
-        [walletAddress, dataUri]
+        "mint",
+        [walletAddress]
     );
     // let StakingContract = new ethers.Contract(
     //   stakeAddress,
@@ -177,7 +177,7 @@ const Home = () => {
       bananaAddress,
       "0"
     );
-    toast.success("Successfully Minted NFT to your wallet address !!");
+    toast.success("Successfully Claimed 100 BNT Tokens!!");
     setIsLoading(false);
   };
 
@@ -191,7 +191,7 @@ const Home = () => {
             <Content style={contentStyle}>
               {isWalletDeployed && (
                 <button className="wallet-address-btn">
-                  SCW: {walletAddress}
+                  Address: {walletAddress}
                   <CopyToClipboard
                     text={walletAddress}
                     onCopy={() => toast.success("Address copied")}
@@ -204,21 +204,10 @@ const Home = () => {
                 <div className="staking">
                   <div className="staking-instructions">
                     <h1 className="staking-instructions-heading">
-                      Hurry! Get your Banana collectible NFT!
+                      Hurry! Get your Banana Airdrop!
                     </h1>
                     <img className="nft-image" src="images/banana-dozen.jpeg" alt="Banana NFT"/>
-                  </div>
-                  <div className="staking-inputs">
-                    <p className="staking-input-disc">*We have prefunded your wallet to make txn</p>
-                    {/* <input
-                      placeholder="Enter amount to stake"
-                      className="stake-input-field"
-                      value={"0.0001"}
-                      type="number"
-                      readOnly
-                    />
-                    <br /> */}
-                    <button className="stake-btn" onClick={() => stakeAfterAuth()} >Mint Banana NFT</button>
+                    <button className="stake-btn" onClick={() => stakeAfterAuth()} >Claim Free Airdrop</button>
                   </div>
                 </div>
               )}
