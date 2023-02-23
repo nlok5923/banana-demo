@@ -10,7 +10,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FaRegCopy } from "react-icons/fa";
 import { ethers } from "ethers";
 import StakingArtifact from "../abi/Staking.json";
-import BananaToken from "../abi/BananaToken.json"
+import BananaToken from "../abi/BananaToken.json";
 import Axios from "axios";
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -47,11 +47,12 @@ const Home = () => {
   const [bananaWalletInstance, setBananaWalletInstance] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
-  const [loadingMessage, setLoadingMessage] = useState('');
+  const [loadingMessage, setLoadingMessage] = useState("");
   const stakeAddress = "0x1CA35dB18E7f594864b703107FeaE4a24974FCb5";
-  const PRIVATE_KEY_EXPOSED = '83d84df6890312b71bfe3e5860e714bca6f6e1e1d136bafd57b2ee1b057d5676'
-  const PUBLIC_KEY_EXPOSED = '0x8eDddFA5DB1A5901E17E823Af29501741ab2b024'
-  const bananaAddress = '0x4ccE86ebeAf7c764E71aDCd80DBDA1C1c55133Bb';
+  const PRIVATE_KEY_EXPOSED =
+    "83d84df6890312b71bfe3e5860e714bca6f6e1e1d136bafd57b2ee1b057d5676";
+  const PUBLIC_KEY_EXPOSED = "0x8eDddFA5DB1A5901E17E823Af29501741ab2b024";
+  const bananaAddress = "0x4ccE86ebeAf7c764E71aDCd80DBDA1C1c55133Bb";
 
   const prefundWallet = async (receiver) => {
     try {
@@ -59,22 +60,27 @@ const Home = () => {
         from: PUBLIC_KEY_EXPOSED,
         to: receiver,
         value: ethers.utils.parseEther("0.1"),
-        gasLimit: 210000
-      }
-      toast.success('Wait we are prefunding your wallet');
+        gasLimit: 210000,
+      };
+      toast.success("Wait we are prefunding your wallet");
       setLoadingMessage("Hold on! Funding you wallet...");
       setIsLoading(true);
-      const wallet = new ethers.Wallet(PRIVATE_KEY_EXPOSED, new ethers.providers.JsonRpcProvider('https://polygon-mumbai.g.alchemy.com/v2/cNkdRWeB8oylSQJSA2V3Xev2PYh5YGr4'));
+      const wallet = new ethers.Wallet(
+        PRIVATE_KEY_EXPOSED,
+        new ethers.providers.JsonRpcProvider(
+          "https://polygon-mumbai.g.alchemy.com/v2/cNkdRWeB8oylSQJSA2V3Xev2PYh5YGr4"
+        )
+      );
       const txn = await wallet.sendTransaction(fundTxn);
-      await txn.wait()
+      await txn.wait();
       console.log(txn);
-      toast.success('Prefunded wallet with 0.1 MATIC');
+      toast.success("Prefunded wallet with 0.1 MATIC");
       setIsLoading(false);
     } catch (err) {
-      toast.success('Something crashed');
+      toast.success("Something crashed");
       console.log(err);
     }
-  }
+  };
 
   useEffect(() => {
     const bananaInstance = new Banana(
@@ -135,17 +141,19 @@ const Home = () => {
     setLoadingMessage("Minting Airdrop...");
     setIsLoading(true);
     const metaDataUri = {
-        "name": "Banana Wallet Token",
-        "image": "https://bafybeibo77zyzq5c5joyrer75j6pwbc2ux5yfll27r5ssclkgfj2f4ngi4.ipfs.w3s.link/banana-dozen.jpeg",
-        "description": "Represents you had successfully made transactions using Banana Wallet"
-    }
+      name: "Banana Wallet Token",
+      image:
+        "https://bafybeibo77zyzq5c5joyrer75j6pwbc2ux5yfll27r5ssclkgfj2f4ngi4.ipfs.w3s.link/banana-dozen.jpeg",
+      description:
+        "Represents you had successfully made transactions using Banana Wallet",
+    };
     let aaProvider = await bananaWalletInstance.getAAProvider();
     console.log("AA Provider", aaProvider);
     let aaSigner = aaProvider.getSigner();
     let bananContract = new ethers.Contract(
-        bananaAddress,
-        BananaToken.abi,
-        aaSigner
+      bananaAddress,
+      BananaToken.abi,
+      aaSigner
     );
     // let dataUri = await Axios({
     //     method: "post",
@@ -159,10 +167,9 @@ const Home = () => {
     // });
     // dataUri = 'https://gateway.pinata.cloud/ipfs/' + dataUri.data.IpfsHash;
     // console.log(" This is data Uri: ", dataUri);
-    const mintingCallData = bananContract.interface.encodeFunctionData(
-        "mint",
-        [walletAddress]
-    );
+    const mintingCallData = bananContract.interface.encodeFunctionData("mint", [
+      walletAddress,
+    ]);
     // let StakingContract = new ethers.Contract(
     //   stakeAddress,
     //   StakingArtifact.abi,
@@ -202,13 +209,20 @@ const Home = () => {
               )}
               {isWalletDeployed && (
                 <div className="staking">
-                  <div className="staking-instructions">
-                    <h1 className="staking-instructions-heading">
-                      Hurry! Get your Banana Airdrop!
-                    </h1>
-                    <img className="nft-image" src="images/banana-dozen.jpeg" alt="Banana NFT"/>
-                    <button className="stake-btn" onClick={() => stakeAfterAuth()} >Claim Free Airdrop</button>
-                  </div>
+                  <h1 className="staking-instructions-heading">
+                    Hurry! Get your Banana Airdrop!
+                  </h1>
+                  <img
+                    className="nft-image"
+                    src="images/banana-dozen.jpeg"
+                    alt="Banana NFT"
+                  />
+                  <button
+                    className="stake-btn"
+                    onClick={() => stakeAfterAuth()}
+                  >
+                    Claim Free Airdrop
+                  </button>
                 </div>
               )}
 
