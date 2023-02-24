@@ -12,6 +12,7 @@ import { ethers } from "ethers";
 import StakingArtifact from "../abi/Staking.json";
 import BananaToken from "../abi/BananaToken.json";
 import Axios from "axios";
+import InstructionsModal from "../Shared/InstructionsModal/InstructionsModal";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -49,6 +50,7 @@ const Home = () => {
   const [walletAddress, setWalletAddress] = useState("");
   const [loadingMessage, setLoadingMessage] = useState("");
   const [isTransactionDone, setIsTransactionDone] = useState(false);
+  const [isInstructionModalOpen, setIsInstructionModalOpen] = useState(false);
   const stakeAddress = "0x1CA35dB18E7f594864b703107FeaE4a24974FCb5";
   const PRIVATE_KEY_EXPOSED =
      process.env.REACT_APP_PRIVATE_KEY;
@@ -84,12 +86,35 @@ const Home = () => {
     }
   };
 
+  const cancelWalletDeployment = () => {
+    setIsLoading(false);
+    setIsWalletDeployed(false);
+    setIsInstructionModalOpen(false);
+    setIsShowWalletModal(false);
+    setModalStatus(false)
+  }
+
+  const checkUsersDeviceCompatibility = async () => {
+    let isPlatformSupport = true;
+    // eslint-disable-next-line no-undef
+    if(PublicKeyCredential) {
+    // eslint-disable-next-line no-undef
+        isPlatformSupport = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+    }
+    return isPlatformSupport;
+  }
+
+  const setInstructionModalFun = (status) => {
+    setIsInstructionModalOpen(status);
+  }
+
   useEffect(() => {
     const bananaInstance = new Banana(
       Chains.mumbai,
       "https://polygon-mumbai.g.alchemy.com/v2/cNkdRWeB8oylSQJSA2V3Xev2PYh5YGr4"
     );
     setBananaWalletInstance(bananaInstance);
+    // checkUsersDeviceCompatibility();
   }, []);
 
   const buttonStyle = {
@@ -102,7 +127,8 @@ const Home = () => {
     color: "#fff",
     backgroundColor: "#F5C14B",
     display: isWalletDeployed ? "none" : "normal",
-    marginLeft: "42%",
+    // marginLeft: "42%",
+    margin: 'auto'
   };
 
   const initWallet = async () => {
@@ -125,6 +151,12 @@ const Home = () => {
         console.log(err);
       }
       return;
+    }
+
+    const isPlatformSupport = await checkUsersDeviceCompatibility();
+
+    if(!isPlatformSupport) {
+        setIsInstructionModalOpen(true);
     }
     setIsShowWalletModal(true);
   };
@@ -245,6 +277,12 @@ const Home = () => {
                       isModalOpen={isShowWalletModal}
                       setModalStatus={(status) => setModalStatus(status)}
                       createWallet={(walletName) => createWallet(walletName)}
+                    />
+                    
+                    <InstructionsModal
+                    instructionModalStatus={isInstructionModalOpen}
+                    instructionModalFun = {(status) => setInstructionModalFun(status)}
+                    cancelCreation = {() => cancelWalletDeployment()}
                     />
                   </>
                 )}
