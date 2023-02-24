@@ -51,7 +51,7 @@ const Home = () => {
   const [isTransactionDone, setIsTransactionDone] = useState(false);
   const stakeAddress = "0x1CA35dB18E7f594864b703107FeaE4a24974FCb5";
   const PRIVATE_KEY_EXPOSED =
-    "83d84df6890312b71bfe3e5860e714bca6f6e1e1d136bafd57b2ee1b057d5676";
+     process.env.REACT_APP_PRIVATE_KEY;
   const PUBLIC_KEY_EXPOSED = "0x8eDddFA5DB1A5901E17E823Af29501741ab2b024";
   const bananaAddress = "0x4ccE86ebeAf7c764E71aDCd80DBDA1C1c55133Bb";
   const POLYGON_MUMBAI_PREFIX = 'https://mumbai.polygonscan.com/address/';
@@ -172,30 +172,9 @@ const Home = () => {
       BananaToken.abi,
       aaSigner
     );
-    // let dataUri = await Axios({
-    //     method: "post",
-    //     url: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
-    //     data: JSON.stringify(metaDataUri),
-    //     headers: {
-    //         'pinata_api_key': '5dbd25d2575c28d30c75',
-    //         'pinata_secret_api_key': '31e6245d30d45e928d0bdc05fec2b83914663311976825e465d1a57fa1af5c7c',
-    //         "Content-Type": "Application/json"
-    //     },
-    // });
-    // dataUri = 'https://gateway.pinata.cloud/ipfs/' + dataUri.data.IpfsHash;
-    // console.log(" This is data Uri: ", dataUri);
     const mintingCallData = bananContract.interface.encodeFunctionData("mint", [
       walletAddress,
     ]);
-    // let StakingContract = new ethers.Contract(
-    //   stakeAddress,
-    //   StakingArtifact.abi,
-    //   aaSigner
-    // );
-    // const stakingCallData = StakingContract.interface.encodeFunctionData(
-    //   "stake",
-    //   []
-    // );
     try {
         const txn = await bananaWalletInstance.execute(
             mintingCallData,
