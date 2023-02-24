@@ -65,7 +65,7 @@ const Home = () => {
         gasLimit: 210000,
       };
       toast.success("Wait we are prefunding your wallet");
-      setLoadingMessage("Hold on! Funding you wallet...");
+      setLoadingMessage("Hold on! Funding your wallet...");
       setIsLoading(true);
       const wallet = new ethers.Wallet(
         PRIVATE_KEY_EXPOSED,
@@ -79,7 +79,7 @@ const Home = () => {
       toast.success("Prefunded wallet with 0.1 MATIC");
       setIsLoading(false);
     } catch (err) {
-      toast.success("Something crashed");
+      toast.error("Wallet prefund crashed !!");
       console.log(err);
     }
   };
@@ -111,12 +111,19 @@ const Home = () => {
     if (walletName) {
       setLoadingMessage("Connecting your wallet...");
       setIsLoading(true);
-      const address = await bananaWalletInstance.getWalletAddress(walletName);
-      console.log("SCW: ", address);
-      setWalletAddress(address);
-      setIsWalletDeployed(true);
-      setIsLoading(false);
-      toast.success("Successfully Connected Wallet!");
+      try {
+        const address = await bananaWalletInstance.getWalletAddress(walletName);
+        console.log("SCW: ", address);
+        setWalletAddress(address);
+        setIsWalletDeployed(true);
+        setIsLoading(false);
+        toast.success("Successfully Connected Wallet!");
+      } catch(err) {
+        toast.error("Something crashed!!");
+        setIsLoading(false);
+        setIsWalletDeployed(false);
+        console.log(err);
+      }
       return;
     }
     setIsShowWalletModal(true);
@@ -125,14 +132,22 @@ const Home = () => {
   const createWallet = async (walletName) => {
     setLoadingMessage("Creating your wallet...");
     setIsLoading(true);
-    const address = await bananaWalletInstance.getWalletAddress(walletName);
-    console.log("SCW: ", address);
-    setWalletAddress(address);
-    setIsShowWalletModal(false);
-    setIsLoading(false);
-    setIsWalletDeployed(true);
-    toast.success("Successfully Created Wallet!");
-    prefundWallet(address);
+    try {
+        const address = await bananaWalletInstance.getWalletAddress(walletName);
+        console.log("SCW: ", address);
+        setWalletAddress(address);
+        setIsShowWalletModal(false);
+        setIsLoading(false);
+        setIsWalletDeployed(true);
+        toast.success("Successfully Created Wallet!");
+        prefundWallet(address);
+    } catch (err) {
+        setIsShowWalletModal(false);
+        setIsLoading(false);
+        setIsWalletDeployed(false);
+        toast.error("Something crashed !!");
+        console.log(err);
+    }
   };
 
   const setModalStatus = (status) => {
@@ -181,14 +196,22 @@ const Home = () => {
     //   "stake",
     //   []
     // );
-    const txn = await bananaWalletInstance.execute(
-      mintingCallData,
-      bananaAddress,
-      "0"
-    );
-    setIsTransactionDone(true);
-    toast.success("Successfully Claimed 100 BNT Tokens!!");
-    setIsLoading(false);
+    try {
+        const txn = await bananaWalletInstance.execute(
+            mintingCallData,
+            bananaAddress,
+            "0"
+        );
+        console.log(txn);
+        setIsTransactionDone(true);
+        toast.success("Successfully Claimed 100 BNT Tokens!!");
+        setIsLoading(false);
+    } catch (err) {
+        setIsTransactionDone(false);
+        toast.success("Something crashed while executing txn !!");
+        setIsLoading(false);
+        console.log(err);
+    }
   };
 
   return (
