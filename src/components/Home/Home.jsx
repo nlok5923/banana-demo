@@ -48,7 +48,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
   const [loadingMessage, setLoadingMessage] = useState("");
-  const [isTransactionDone, setIsTransactionDone] = useState(true);
+  const [isTransactionDone, setIsTransactionDone] = useState(false);
   const stakeAddress = "0x1CA35dB18E7f594864b703107FeaE4a24974FCb5";
   const PRIVATE_KEY_EXPOSED =
     "83d84df6890312b71bfe3e5860e714bca6f6e1e1d136bafd57b2ee1b057d5676";
@@ -216,7 +216,7 @@ const Home = () => {
                     Hurry! Get your Banana Airdrop!
                   </h1>
                   {isTransactionDone && <button className="txn-address-btn">
-                  <a href={POLYGON_MUMBAI_PREFIX + walletAddress} rel="noreferrer" target={"_blank"} className='lp-footer-links-li'>View on Explorer</a>
+                  <a href={POLYGON_MUMBAI_PREFIX + walletAddress + "#tokentxns"} rel="noreferrer" target={"_blank"} className='lp-footer-links-li'>View on Explorer</a>
                 </button> }
                   <img
                     className="nft-image"
