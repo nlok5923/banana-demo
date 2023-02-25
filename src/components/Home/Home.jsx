@@ -162,8 +162,17 @@ const Home = () => {
   };
 
   const createWallet = async (walletName) => {
+
     setLoadingMessage("Creating your wallet...");
     setIsLoading(true);
+
+    const isWalletNameUnique = await bananaWalletInstance.isWalletNameUnique(walletName);
+    if(!isWalletNameUnique) {
+        toast.error("Wallet name already taken please enter different wallet name");
+        setIsLoading(false);
+        return 
+    }
+
     try {
         const address = await bananaWalletInstance.getWalletAddress(walletName);
         console.log("SCW: ", address);
