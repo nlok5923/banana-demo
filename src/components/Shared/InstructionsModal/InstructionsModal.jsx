@@ -47,10 +47,11 @@ const InstructionsModal = (props) => {
     setOpen(false);
   };
   const instructions = [
-    "If you don't it then cancel the key setup and select \n'A different device' in pop-up",
-    "Scan the QR code with your phone and allow Chrome to find and connect with your device.",
-    "Give your fingerprint and voila! Your wallet is ready to use.",
-    "To execute a transaction, approve transactions on your phone with just a tap."
+    "If a pop-up appears asking for security key setup, click on 'cancel'. Then continue with step-2.",
+    "You will also see a pop-up for authentication, select 'A different device' in the pop-up.",
+    "Scan the QR code with your phone and allow the browser to find and connect with your device.",
+    "Give your fingerprint/face-id for authentication, and voila! Your wallet is ready to use.",
+    "To execute a transaction, Complete the authentication process with your phone, and you are done!"
   ];
 
   return (
