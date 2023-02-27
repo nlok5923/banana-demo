@@ -53,7 +53,7 @@ const Home = () => {
   const [isInstructionModalOpen, setIsInstructionModalOpen] = useState(false);
   const stakeAddress = "0x1CA35dB18E7f594864b703107FeaE4a24974FCb5";
   const PRIVATE_KEY_EXPOSED =
-     process.env.REACT_APP_PRIVATE_KEY;
+   process.env.REACT_APP_PRIVATE_KEY;
   const PUBLIC_KEY_EXPOSED = "0x8eDddFA5DB1A5901E17E823Af29501741ab2b024";
   const bananaAddress = "0x4ccE86ebeAf7c764E71aDCd80DBDA1C1c55133Bb";
   const POLYGON_MUMBAI_PREFIX = 'https://mumbai.polygonscan.com/address/';

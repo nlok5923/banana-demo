@@ -22,7 +22,7 @@ const WalletModal = (props) => {
     <div>
       <Modal
         open={props.isModalOpen}
-        title="Provide Unqiue Wallet Name"
+        title="Provide Unique Wallet Name"
         onOk={handleOk}
         footer={false}
         onCancel={handleCancel}
