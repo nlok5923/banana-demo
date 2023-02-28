@@ -8,6 +8,7 @@ import Loader from "../Shared/Loader/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FaRegCopy } from "react-icons/fa";
+import { FaLink } from "react-icons/fa"
 import { ethers } from "ethers";
 import StakingArtifact from "../abi/Staking.json";
 import BananaToken from "../abi/BananaToken.json";
@@ -239,19 +240,16 @@ const Home = () => {
     <div className="container">
       <Space direction="vertical" style={{ width: "100%" }}>
         <Layout>
-          <Header style={headerStyle}>Welcome to Banana Wallet SDK! 🚀</Header>
+          <Header style={headerStyle}>Welcome to Banana Wallet SDK 🚀</Header>
           <Toaster />
           <Loader isLoading={isLoading} message={loadingMessage}>
             <Content style={contentStyle}>
               {isWalletDeployed && (
                 <button className="wallet-address-btn">
                   Address: {walletAddress}
-                  <CopyToClipboard
-                    text={walletAddress}
-                    onCopy={() => toast.success("Address copied")}
-                  >
-                    <FaRegCopy style={{ marginLeft: "10px" }} />
-                  </CopyToClipboard>
+                  <a href={POLYGON_MUMBAI_PREFIX + walletAddress} rel="noreferrer" target={"_blank"} className='lp-footer-links-li'>
+                    <FaLink style={{ marginLeft: "10px" }} />
+                    </a>
                 </button>
               )}
               {isWalletDeployed && (
