@@ -22,7 +22,7 @@
     border: 1px solid black;
     border-radius: 20px;
     padding: 10px 20px;
-    background-color: #fff;
+    background-color: #FFF6DA;
     text-align: center;
     margin-top: 3%;
 }
@@ -93,12 +93,12 @@
     display: block;
     margin: auto;
     padding: 10px 40px;
-    background-color: #ffffff;
+    background-color: #100720;
     border-radius: 20px;
     font-size: 20px;
     cursor: pointer;
     border: 1px solid black;
-    color: black;
+    color: white;
     font-size: 14px;
     margin-top: 2.5%;
 }

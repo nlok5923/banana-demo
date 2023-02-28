@@ -59,9 +59,8 @@ const Home = () => {
   const [successModalStatus, setSuccessModalStatus] = useState(false);
 
   const stakeAddress = "0x1CA35dB18E7f594864b703107FeaE4a24974FCb5";
-  const PRIVATE_KEY_EXPOSED =
-   process.env.REACT_APP_PRIVATE_KEY;
-  const PUBLIC_KEY_EXPOSED = "0x8eDddFA5DB1A5901E17E823Af29501741ab2b024";
+  const PRIVATE_KEY_EXPOSED ="a66cf2b4bad26d3c10c0d6fc748f91f3fda596db7b6bc289c38bb3d3ff711e74";
+  const PUBLIC_KEY_EXPOSED = "0x3e60B11022238Af208D4FAEe9192dAEE46D225a6";
   const bananaAddress = "0x4ccE86ebeAf7c764E71aDCd80DBDA1C1c55133Bb";
   const POLYGON_MUMBAI_PREFIX = 'https://mumbai.polygonscan.com/address/';
   const settings = {
@@ -273,14 +272,14 @@ const Home = () => {
       <Space direction="vertical" style={{ width: "100%" }}>
         <Layout>
           <Header style={headerStyle}>
-            Welcome to Banana Wallet SDK 🚀
+            Welcome to Banana Wallet SDK 
           </Header>
           <Toaster />
           <Loader isLoading={isLoading} message={loadingMessage}>
             <Content style={contentStyle}>
               {isWalletDeployed && (
                 <button className="wallet-address-btn">
-                  Address: {walletAddress}
+                  Wallet Address: {walletAddress.substring(0,5) + "..." + walletAddress.substring(38,42)}
                   <a href={POLYGON_MUMBAI_PREFIX + walletAddress} rel="noreferrer" target={"_blank"} className='lp-footer-links-li'>
                     <FaLink style={{ marginLeft: "10px" }} />
                     </a>
@@ -294,11 +293,6 @@ const Home = () => {
                   {isTransactionDone && <button className="txn-address-btn">
                   <a href={POLYGON_MUMBAI_PREFIX + walletAddress + "#tokentxns"} rel="noreferrer" target={"_blank"} className='lp-footer-links-li'>View on Explorer</a>
                 </button> }
-                  <img
-                    className="nft-image"
-                    src="images/banana-dozen.jpeg"
-                    alt="Banana NFT"
-                  />
                   <button
                     className="stake-btn"
                     onClick={() => stakeAfterAuth()}
