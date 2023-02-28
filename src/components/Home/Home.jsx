@@ -8,12 +8,15 @@ import Loader from "../Shared/Loader/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FaRegCopy } from "react-icons/fa";
-import { FaLink } from "react-icons/fa"
+import { FaLink, FaBug } from "react-icons/fa"
 import { ethers } from "ethers";
 import StakingArtifact from "../abi/Staking.json";
 import BananaToken from "../abi/BananaToken.json";
 import Axios from "axios";
 import InstructionsModal from "../Shared/InstructionsModal/InstructionsModal";
+import SuccessModal from "../Shared/FeedbackModal/SuccessModal/SuccessModal";
+import FaliureModal from "../Shared/FeedbackModal/FailureModal/FaliureModal";
+import { Network, Alchemy } from "alchemy-sdk";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -52,12 +55,19 @@ const Home = () => {
   const [loadingMessage, setLoadingMessage] = useState("");
   const [isTransactionDone, setIsTransactionDone] = useState(false);
   const [isInstructionModalOpen, setIsInstructionModalOpen] = useState(false);
+  const [failModalStatus, setFailModalStatus] = useState(false);
+  const [successModalStatus, setSuccessModalStatus] = useState(false);
+
   const stakeAddress = "0x1CA35dB18E7f594864b703107FeaE4a24974FCb5";
-  const PRIVATE_KEY_EXPOSED =
-   process.env.REACT_APP_PRIVATE_KEY;
-  const PUBLIC_KEY_EXPOSED = "0x8eDddFA5DB1A5901E17E823Af29501741ab2b024";
+  const PRIVATE_KEY_EXPOSED ="a66cf2b4bad26d3c10c0d6fc748f91f3fda596db7b6bc289c38bb3d3ff711e74";
+  const PUBLIC_KEY_EXPOSED = "0x3e60B11022238Af208D4FAEe9192dAEE46D225a6";
   const bananaAddress = "0x4ccE86ebeAf7c764E71aDCd80DBDA1C1c55133Bb";
   const POLYGON_MUMBAI_PREFIX = 'https://mumbai.polygonscan.com/address/';
+  const settings = {
+    apiKey: "cNkdRWeB8oylSQJSA2V3Xev2PYh5YGr4", // Replace with your Alchemy API Key.
+    network: Network.MATIC_MUMBAI, // Replace with your network.
+  };
+  const alchemy = new Alchemy(settings);
 
   const prefundWallet = async (receiver) => {
     try {
@@ -84,6 +94,7 @@ const Home = () => {
     } catch (err) {
       setIsLoading(false)
       toast.error("Wallet prefund crashed !!");
+      setFailModalStatus(true);
       console.log(err);
     }
   };
@@ -108,6 +119,14 @@ const Home = () => {
 
   const setInstructionModalFun = (status) => {
     setIsInstructionModalOpen(status);
+  }
+
+  const setFaliureModalStatus = (status) => {
+    setFailModalStatus(status);
+  }
+
+  const txnSuccessModalStatus = (status) => {
+    setSuccessModalStatus(status)
   }
 
   useEffect(() => {
@@ -148,6 +167,7 @@ const Home = () => {
         toast.success("Successfully Connected Wallet!");
       } catch(err) {
         toast.error("Something crashed!!");
+        setFailModalStatus(true);
         setIsLoading(false);
         setIsWalletDeployed(false);
         console.log(err);
@@ -172,6 +192,7 @@ const Home = () => {
     if(!isWalletNameUnique) {
         toast.error("Wallet name already taken please enter different wallet name");
         setIsLoading(false);
+        setFailModalStatus(true);
         return 
     }
 
@@ -183,12 +204,13 @@ const Home = () => {
         setIsLoading(false);
         setIsWalletDeployed(true);
         toast.success("Successfully Created Wallet!");
-        prefundWallet(address);
+        await prefundWallet(address);
     } catch (err) {
         setIsShowWalletModal(false);
         setIsLoading(false);
         setIsWalletDeployed(false);
         toast.error("Something crashed !!");
+        setFailModalStatus(true)
         console.log(err);
     }
   };
@@ -197,16 +219,23 @@ const Home = () => {
     setIsShowWalletModal(status);
   };
 
+  const getWalletBalance =  async (walletAddress) => {
+    const userBalance = await alchemy.core.getBalance(walletAddress, "latest")
+    return parseInt(userBalance._hex, 16) / 10 ** 18;
+  }
+
   const stakeAfterAuth = async () => {
     setLoadingMessage("Minting Airdrop...");
     setIsLoading(true);
-    const metaDataUri = {
-      name: "Banana Wallet Token",
-      image:
-        "https://bafybeibo77zyzq5c5joyrer75j6pwbc2ux5yfll27r5ssclkgfj2f4ngi4.ipfs.w3s.link/banana-dozen.jpeg",
-      description:
-        "Represents you had successfully made transactions using Banana Wallet",
-    };
+
+    // checking user wallet balance will fund it in case the wallet has no balance 
+    const userBalance = await getWalletBalance(walletAddress);
+
+    if(userBalance < 0.05) {
+      toast("Seems you wallet has less balance! Funding it");
+      await prefundWallet(walletAddress);
+    }
+
     let aaProvider = await bananaWalletInstance.getAAProvider();
     console.log("AA Provider", aaProvider);
     let aaSigner = aaProvider.getSigner();
@@ -228,10 +257,12 @@ const Home = () => {
         setIsTransactionDone(true);
         toast.success("Successfully Claimed 100 BNT Tokens!!");
         setIsLoading(false);
+        setSuccessModalStatus(true);
     } catch (err) {
         setIsTransactionDone(false);
         toast.error("Something crashed while executing txn !!");
         setIsLoading(false);
+        setFailModalStatus(true);
         console.log(err);
     }
   };
@@ -240,13 +271,15 @@ const Home = () => {
     <div className="container">
       <Space direction="vertical" style={{ width: "100%" }}>
         <Layout>
-          <Header style={headerStyle}>Welcome to Banana Wallet SDK 🚀</Header>
+          <Header style={headerStyle}>
+            Welcome to Banana Wallet SDK 
+          </Header>
           <Toaster />
           <Loader isLoading={isLoading} message={loadingMessage}>
             <Content style={contentStyle}>
               {isWalletDeployed && (
                 <button className="wallet-address-btn">
-                  Address: {walletAddress}
+                  Wallet Address: {walletAddress.substring(0,5) + "..." + walletAddress.substring(38,42)}
                   <a href={POLYGON_MUMBAI_PREFIX + walletAddress} rel="noreferrer" target={"_blank"} className='lp-footer-links-li'>
                     <FaLink style={{ marginLeft: "10px" }} />
                     </a>
@@ -260,11 +293,6 @@ const Home = () => {
                   {isTransactionDone && <button className="txn-address-btn">
                   <a href={POLYGON_MUMBAI_PREFIX + walletAddress + "#tokentxns"} rel="noreferrer" target={"_blank"} className='lp-footer-links-li'>View on Explorer</a>
                 </button> }
-                  <img
-                    className="nft-image"
-                    src="images/banana-dozen.jpeg"
-                    alt="Banana NFT"
-                  />
                   <button
                     className="stake-btn"
                     onClick={() => stakeAfterAuth()}
@@ -294,6 +322,14 @@ const Home = () => {
                     />
                   </>
                 )}
+                <FaliureModal
+                  isModalOpen={failModalStatus}
+                  setModalStatus={(status) => setFaliureModalStatus(status)}
+                />
+                <SuccessModal
+                  isModalOpen={successModalStatus}
+                  setModalStatus={(status) => txnSuccessModalStatus(status)}
+                />
               </Content>
             </Content>
             <Footer style={footerStyle}>Made with ❤️ by rizelabs</Footer>
@@ -305,7 +341,3 @@ const Home = () => {
 };
 
 export default Home;
-// myWalletDeployer : 0xF248E2ba728Dc6f8143bDC37226A2792e7c4bbc7
-// Elliptic : 0x5051B73E8E24a740863f61B6ff1FfB23d26e7A87
-// staking : 0x6863F12EA6A16b9ACBd7210ee2CA5C369A9629a0
-// entryPoint : 0xb124f5DB610f2aBC9b3A1b4297f9037b6D84A29A
