@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Home.css";
 import { Layout, Space, Button, AutoComplete, Modal, Row, Col } from "antd";
 import WalletModal from "../Shared/Modal/Modal";
+import PostTransactionModal from "../Shared/PostTransactionModal/PostTransactionModal";
 import { Banana } from "@rize-labs/banana-wallet-sdk/dist/BananaProvider";
 import { Chains } from "@rize-labs/banana-wallet-sdk/dist/Constants";
 import Loader from "../Shared/Loader/Loader";
@@ -258,9 +259,26 @@ const Home = () => {
                   <h1 className="staking-instructions-heading">
                     Hurry! Get your Banana Airdrop!
                   </h1>
-                  {isTransactionDone && <button className="txn-address-btn">
+                  {/* {isTransactionDone && <button className="txn-address-btn">
                   <a href={POLYGON_MUMBAI_PREFIX + walletAddress + "#tokentxns"} rel="noreferrer" target={"_blank"} className='lp-footer-links-li'>View on Explorer</a>
-                </button> }
+                </button>}
+                
+                {isTransactionDone && <button className="txn-address-btn">
+                  <a href="https://forms.gle/Bw5eg16yKGxeagjG6" rel="noreferrer" className='lp-footer-links-li'>Give Feedback</a>
+                </button>} */}
+                {isTransactionDone && (
+                  <>
+                    <PostTransactionModal
+                    isModalOpen={isShowWalletModal}
+                    setModalStatus={(status) => setModalStatus(status)}
+                    createWallet={(walletName) => createWallet(walletName)}
+                    />
+
+                  </>
+                )
+
+                }
+
                   <img
                     className="nft-image"
                     src="images/banana-dozen.jpeg"

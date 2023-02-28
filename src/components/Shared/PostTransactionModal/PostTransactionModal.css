@@ -1,0 +1,60 @@
+.wallet-identifier-input {
+    background: #f3f3f3;
+    border: 1px solid #e3e3e3;
+    border-radius: 4px;
+    padding: 10px 15px;
+    width: 50%;
+    /* margin-left: 100px; */
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #333;
+}
+
+.init-wallet-modal-btn {
+    display: block;
+    margin: auto;
+    padding: 10px 30px;
+    background-color: #F5C14B;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 1px solid black;
+    color: black;
+    font-size: 14px;
+}
+
+/* Style for the Modal */
+.ant-modal {
+    max-width: 600px;
+  }
+  
+  /* Style for the instruction container */
+  .instruction-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  
+  /* Style for the instruction item */
+  .instruction-item {
+    display: flex;
+    gap: 10px;
+  }
+  
+  /* Style for the instruction index */
+  .instruction-index {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #1890ff;
+  }
+  
+  /* Style for the instruction text */
+  .instruction-text {
+    font-size: 1rem;
+  }
+  .instruction-or {
+    font-size: 0.5rem;
+    text-align: center
+  }
+
