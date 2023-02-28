@@ -81,6 +81,7 @@ const Home = () => {
       toast.success("Prefunded wallet with 0.1 MATIC");
       setIsLoading(false);
     } catch (err) {
+      setIsLoading(false)
       toast.error("Wallet prefund crashed !!");
       console.log(err);
     }
@@ -228,7 +229,7 @@ const Home = () => {
         setIsLoading(false);
     } catch (err) {
         setIsTransactionDone(false);
-        toast.success("Something crashed while executing txn !!");
+        toast.error("Something crashed while executing txn !!");
         setIsLoading(false);
         console.log(err);
     }
