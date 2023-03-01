@@ -30,6 +30,7 @@ const WalletModal = (props) => {
       >
         <input className="wallet-identifier-input" placeholder="Wallet unique identifier" onChange={(e) => setWalletName(e.target.value)} /> <br />
         <button className="init-wallet-modal-btn" onClick={() => props.createWallet(walletName)} >Create Wallet</button>
+        <p className="disclaimer"> *Please note: When creating/connecting in, you will have the option to authenticate using your biometric data or password. Dont worry! we do not store or use your biometric data or password for any purpose.</p>
       </Modal>
     </div>
   );
