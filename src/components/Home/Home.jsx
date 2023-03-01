@@ -239,6 +239,9 @@ const Home = () => {
       await prefundWallet(walletAddress);
     }
 
+    setLoadingMessage("Minting Airdrop...");
+    setIsLoading(true);
+
     let aaProvider = await bananaWalletInstance.getAAProvider();
     console.log("AA Provider", aaProvider);
     let aaSigner = aaProvider.getSigner();
