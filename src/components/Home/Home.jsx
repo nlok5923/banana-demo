@@ -235,7 +235,7 @@ const Home = () => {
     const userBalance = await getWalletBalance(walletAddress);
 
     if(userBalance < 0.05) {
-      toast("Seems you wallet has less balance! Funding it");
+      toast("Wallet balance is low! Funding it");
       await prefundWallet(walletAddress);
     }
 
