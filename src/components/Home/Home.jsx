@@ -97,7 +97,7 @@ const Home = () => {
     } catch (err) {
       setIsLoading(false)
       toast.error("Wallet prefund crashed !!");
-      setFailModalStatus(true);
+      // setFailModalStatus(true);
       console.log(err);
     }
   };
@@ -169,8 +169,8 @@ const Home = () => {
         setIsLoading(false);
         toast.success("Successfully Connected Wallet!");
       } catch(err) {
-        toast.error("Something crashed!!");
-        setFailModalStatus(true);
+        toast("Something crashed!! While connecting");
+        // setFailModalStatus(true);
         setIsLoading(false);
         setIsWalletDeployed(false);
         console.log(err);
@@ -193,9 +193,9 @@ const Home = () => {
 
     const isWalletNameUnique = await bananaWalletInstance.isWalletNameUnique(walletName);
     if(!isWalletNameUnique) {
-        toast.error("Wallet name already taken please enter different wallet name");
+        toast("Wallet name already taken please enter different wallet name");
         setIsLoading(false);
-        setFailModalStatus(true);
+        // setFailModalStatus(true);
         return 
     }
 
@@ -212,8 +212,8 @@ const Home = () => {
         setIsShowWalletModal(false);
         setIsLoading(false);
         setIsWalletDeployed(false);
-        toast.error("Something crashed !!");
-        setFailModalStatus(true)
+        toast("Currently this device is not supported!");
+        // setFailModalStatus(true)
         console.log(err);
     }
   };
@@ -266,9 +266,9 @@ const Home = () => {
         setSuccessModalStatus(true);
     } catch (err) {
         setIsTransactionDone(false);
-        toast.error("Something crashed while executing txn !!");
+        toast("Your new wallet is ready! Please refresh");
         setIsLoading(false);
-        setFailModalStatus(true);
+        // setFailModalStatus(true);
         console.log(err);
     }
   };
