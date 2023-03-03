@@ -97,7 +97,7 @@ const Home = () => {
     } catch (err) {
       setIsLoading(false)
       toast.error("Wallet prefund crashed !!");
-      setFailModalStatus(true);
+      // setFailModalStatus(true);
       console.log(err);
     }
   };
@@ -169,8 +169,8 @@ const Home = () => {
         setIsLoading(false);
         toast.success("Successfully Connected Wallet!");
       } catch(err) {
-        toast("Something crashed!!");
-        setFailModalStatus(true);
+        toast("Something crashed!! While connecting");
+        // setFailModalStatus(true);
         setIsLoading(false);
         setIsWalletDeployed(false);
         console.log(err);
@@ -195,7 +195,7 @@ const Home = () => {
     if(!isWalletNameUnique) {
         toast("Wallet name already taken please enter different wallet name");
         setIsLoading(false);
-        setFailModalStatus(true);
+        // setFailModalStatus(true);
         return 
     }
 
@@ -213,7 +213,7 @@ const Home = () => {
         setIsLoading(false);
         setIsWalletDeployed(false);
         toast("Currently this device is not supported!");
-        setFailModalStatus(true)
+        // setFailModalStatus(true)
         console.log(err);
     }
   };
@@ -268,7 +268,7 @@ const Home = () => {
         setIsTransactionDone(false);
         toast("Your new wallet is ready! Please refresh");
         setIsLoading(false);
-        setFailModalStatus(true);
+        // setFailModalStatus(true);
         console.log(err);
     }
   };
