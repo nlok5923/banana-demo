@@ -169,7 +169,7 @@ const Home = () => {
         setIsLoading(false);
         toast.success("Successfully Connected Wallet!");
       } catch(err) {
-        toast.error("Something crashed!!");
+        toast("Something crashed!!");
         setFailModalStatus(true);
         setIsLoading(false);
         setIsWalletDeployed(false);
@@ -193,7 +193,7 @@ const Home = () => {
 
     const isWalletNameUnique = await bananaWalletInstance.isWalletNameUnique(walletName);
     if(!isWalletNameUnique) {
-        toast.error("Wallet name already taken please enter different wallet name");
+        toast("Wallet name already taken please enter different wallet name");
         setIsLoading(false);
         setFailModalStatus(true);
         return 
@@ -212,7 +212,7 @@ const Home = () => {
         setIsShowWalletModal(false);
         setIsLoading(false);
         setIsWalletDeployed(false);
-        toast.error("Your device does not support R1 signatures 😢");
+        toast("Currently this device is not supported!");
         setFailModalStatus(true)
         console.log(err);
     }
@@ -266,7 +266,7 @@ const Home = () => {
         setSuccessModalStatus(true);
     } catch (err) {
         setIsTransactionDone(false);
-        toast.error("Something crashed while executing txn !!");
+        toast("Your new wallet is ready! Please refresh");
         setIsLoading(false);
         setFailModalStatus(true);
         console.log(err);
