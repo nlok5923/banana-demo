@@ -212,7 +212,7 @@ const Home = () => {
         setIsShowWalletModal(false);
         setIsLoading(false);
         setIsWalletDeployed(false);
-        toast.error("Something crashed !!");
+        toast.error("Your device does not support R1 signatures 😢");
         setFailModalStatus(true)
         console.log(err);
     }
