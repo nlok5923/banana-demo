@@ -1,11 +1,35 @@
 import "./SuccessModal.css";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button } from "antd";
 
 const SuccessModal = (props) => {
   const handleCancel = () => {
     props.setModalStatus(false);
   };
+
+  const [visible, setVisible] = useState(false);
+
+  const getWindowDimensions = () => {
+     const { innerWidth: width, innerHeight: height } = window
+     return { width, height }
+  }
+
+  const useWindowDimensions = () => {
+     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
+
+     useEffect(() => {
+        const handleResize = () => setWindowDimensions(getWindowDimensions())
+
+        window.addEventListener('resize', handleResize)
+
+        return () => window.removeEventListener('resize', handleResize)
+
+      }, [])
+
+      return windowDimensions
+  }
+
+  const { width } = useWindowDimensions();
 
   return (
     <div>
@@ -14,7 +38,7 @@ const SuccessModal = (props) => {
         title="Greetings 🙏🏻"
         footer={false}
         onCancel={handleCancel}
-        style={{ textAlign: "center" }}
+        style={{ textAlign: "center", width: (30 * width / 100), minWidth: (30 * width / 100) }}
       >
         <h2>
           Thank you for using Banana Wallet! ✨

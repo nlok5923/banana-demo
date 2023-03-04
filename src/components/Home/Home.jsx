@@ -146,7 +146,7 @@ const Home = () => {
     minHeight: 100,
     height: "100%",
     minWidth: 100,
-    width: "20%",
+    width: "100%",
     paddingTop: "21%",
     color: "#fff",
     backgroundColor: "#F5C14B",
@@ -200,10 +200,10 @@ const Home = () => {
     }
 
     try {
+        setIsShowWalletModal(false);
         const address = await bananaWalletInstance.getWalletAddress(walletName);
         console.log("SCW: ", address);
         setWalletAddress(address);
-        setIsShowWalletModal(false);
         setIsLoading(false);
         setIsWalletDeployed(true);
         toast.success("Successfully Created Wallet!");
@@ -314,7 +314,7 @@ const Home = () => {
                     <button className="wallet-btn" onClick={() => initWallet()}>
                       🍌 Get Started
                     </button>
-
+                  
                     <WalletModal
                       isModalOpen={isShowWalletModal}
                       setModalStatus={(status) => setModalStatus(status)}
