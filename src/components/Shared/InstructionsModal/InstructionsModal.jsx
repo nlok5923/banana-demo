@@ -1,8 +1,7 @@
-import React, { createContext } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import "./InstructionsModal.css";
 import { Button, Modal, Space } from "antd";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { useState } from "react";
 
 // const LocalizedModal = () => {
 //   const [open, setOpen] = useState(false);
@@ -43,6 +42,30 @@ const InstructionsModal = (props) => {
   const [modal, contextHolder] = Modal.useModal();
   const [open, setOpen] = useState(false);
 
+  const [visible, setVisible] = useState(false);
+
+  const getWindowDimensions = () => {
+     const { innerWidth: width, innerHeight: height } = window
+     return { width, height }
+  }
+
+  const useWindowDimensions = () => {
+     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
+
+     useEffect(() => {
+        const handleResize = () => setWindowDimensions(getWindowDimensions())
+
+        window.addEventListener('resize', handleResize)
+
+        return () => window.removeEventListener('resize', handleResize)
+
+      }, [])
+
+      return windowDimensions
+  }
+
+  const { width } = useWindowDimensions();
+
   const hideModal = () => {
     setOpen(false);
   };
@@ -67,6 +90,7 @@ const InstructionsModal = (props) => {
         open={props.instructionModalStatus}
         onOk={() => props.instructionModalFun(false)}
         onCancel={() => props.cancelCreation()}
+        style={{ textAlign: "center", width: (30 * width / 100), minWidth: (30 * width / 100) }}
         okText="Continue"
       >
         <div className="instruction-container">

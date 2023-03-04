@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Modal.css";
 import { Modal, Button } from "antd";
 
@@ -18,6 +18,28 @@ const WalletModal = (props) => {
     props.setModalStatus(false)
   };
 
+  const getWindowDimensions = () => {
+    const { innerWidth: width, innerHeight: height } = window
+    return { width, height }
+ }
+
+ const useWindowDimensions = () => {
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
+
+    useEffect(() => {
+       const handleResize = () => setWindowDimensions(getWindowDimensions())
+
+       window.addEventListener('resize', handleResize)
+
+       return () => window.removeEventListener('resize', handleResize)
+
+     }, [])
+
+     return windowDimensions
+ }
+
+ const { width } = useWindowDimensions();
+
   return (
     <div>
       <Modal
@@ -26,7 +48,7 @@ const WalletModal = (props) => {
         onOk={handleOk}
         footer={false}
         onCancel={handleCancel}
-        style={{ textAlign:'center' }}
+        style={{ textAlign: "center", width: (30 * width / 100), minWidth: (30 * width / 100) }}
       >
         <input className="wallet-identifier-input" placeholder="Wallet unique identifier" onChange={(e) => setWalletName(e.target.value)} /> <br />
         <button className="init-wallet-modal-btn" onClick={() => props.createWallet(walletName)} >Create Wallet</button>
