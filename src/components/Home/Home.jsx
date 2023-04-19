@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./Home.css";
 import { Layout, Space, Button, AutoComplete, Modal, Row, Col } from "antd";
 import WalletModal from "../Shared/Modal/Modal";
-import { Banana } from "@rize-labs/banana-wallet-sdk/dist/BananaProvider";
-import { Chains } from "@rize-labs/banana-wallet-sdk/dist/Constants";
+import { Banana, Chains } from "@rize-labs/banana-wallet-sdk";
 import Loader from "../Shared/Loader/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { FaRegCopy } from "react-icons/fa";
 import { FaLink, FaBug } from "react-icons/fa"
-import { ethers } from "ethers";
+import { Signer, ethers } from "ethers";
 import StakingArtifact from "../abi/Staking.json";
 import BananaToken from "../abi/BananaToken.json";
 import Axios from "axios";
@@ -57,6 +56,7 @@ const Home = () => {
   const [isInstructionModalOpen, setIsInstructionModalOpen] = useState(false);
   const [failModalStatus, setFailModalStatus] = useState(false);
   const [successModalStatus, setSuccessModalStatus] = useState(false);
+  const [wallet, setWallet] = useState(null);
 
   const stakeAddress = "0x1CA35dB18E7f594864b703107FeaE4a24974FCb5";
   // const PRIVATE_KEY_EXPOSED ="a66cf2b4bad26d3c10c0d6fc748f91f3fda596db7b6bc289c38bb3d3ff711e74";
@@ -135,7 +135,7 @@ const Home = () => {
   useEffect(() => {
     const bananaInstance = new Banana(
       Chains.mumbai,
-      "https://polygon-mumbai.g.alchemy.com/v2/cNkdRWeB8oylSQJSA2V3Xev2PYh5YGr4"
+      // "https://polygon-mumbai.g.alchemy.com/v2/cNkdRWeB8oylSQJSA2V3Xev2PYh5YGr4"
     );
     setBananaWalletInstance(bananaInstance);
     // checkUsersDeviceCompatibility();
@@ -162,7 +162,10 @@ const Home = () => {
       setLoadingMessage("Connecting your wallet...");
       setIsLoading(true);
       try {
-        const address = await bananaWalletInstance.getWalletAddress(walletName);
+        const walletInstance = await bananaWalletInstance.connectWallet(walletName);
+        setWallet(walletInstance);
+
+        const address = await walletInstance.getAddress();
         console.log("SCW: ", address);
         setWalletAddress(address);
         setIsWalletDeployed(true);
@@ -183,25 +186,29 @@ const Home = () => {
     if(!isPlatformSupport) {
         setIsInstructionModalOpen(true);
     }
-    setIsShowWalletModal(true);
+
+    await createWallet();
+    // setIsShowWalletModal(true);
   };
 
-  const createWallet = async (walletName) => {
+  const createWallet = async () => {
 
     setLoadingMessage("Creating your wallet...");
     setIsLoading(true);
 
-    const isWalletNameUnique = await bananaWalletInstance.isWalletNameUnique(walletName);
-    if(!isWalletNameUnique) {
-        toast("Wallet name already taken please enter different wallet name");
-        setIsLoading(false);
-        // setFailModalStatus(true);
-        return 
-    }
+    // const isWalletNameUnique = await bananaWalletInstance.isWalletNameUnique(walletName);
+    // if(!isWalletNameUnique) {
+    //     toast.error("Wallet name already taken please enter different wallet name");
+    //     setIsLoading(false);
+    //     setFailModalStatus(true);
+    //     return 
+    // }
 
     try {
-        setIsShowWalletModal(false);
-        const address = await bananaWalletInstance.getWalletAddress(walletName);
+        const walletInstance = await bananaWalletInstance.createWallet();
+        setWallet(walletInstance);
+        const address = await walletInstance.getAddress();
+
         console.log("SCW: ", address);
         setWalletAddress(address);
         setIsLoading(false);
@@ -242,23 +249,30 @@ const Home = () => {
     setLoadingMessage("Minting Airdrop...");
     setIsLoading(true);
 
-    let aaProvider = await bananaWalletInstance.getAAProvider();
-    console.log("AA Provider", aaProvider);
-    let aaSigner = aaProvider.getSigner();
+    let bananaSigner = await wallet.getSigner();
     let bananContract = new ethers.Contract(
       bananaAddress,
       BananaToken.abi,
-      aaSigner
+      bananaSigner
     );
     const mintingCallData = bananContract.interface.encodeFunctionData("mint", [
       walletAddress,
     ]);
     try {
-        const txn = await bananaWalletInstance.execute(
-            mintingCallData,
-            bananaAddress,
-            "0"
-        );
+        // const txn = await bananaWalletInstance.execute(
+        //     mintingCallData,
+        //     bananaAddress,
+        //     "0"
+        // );
+        const tx1 = {
+          gasLimit: '0x55555',
+          to: bananaAddress,
+          value: 0,
+          data: mintingCallData
+        }
+
+        let txn = await bananaSigner.sendTransaction(tx1);
+
         console.log(txn);
         setIsTransactionDone(true);
         toast.success("Successfully Claimed 100 BNT Tokens!!");
