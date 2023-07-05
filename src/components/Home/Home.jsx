@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */
 import React, { useState, useEffect } from "react";
 import "./Home.css";
 import { Layout, Space, Button, AutoComplete, Modal, Row, Col } from "antd";
 import WalletModal from "../Shared/Modal/Modal";
-import { Banana, Chains } from "@rize-labs/banana-wallet-sdk";
+import { Banana, Chains } from "@rize-labs/banana-wallet-demo-sdk";
 import Loader from "../Shared/Loader/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import { CopyToClipboard } from "react-copy-to-clipboard";
@@ -193,28 +194,6 @@ const Home = () => {
     // setIsShowWalletModal(true);
   };
 
-  const checkPopUps = () => {
-    var popupBlockerEnabled = false;
-
-    // Attempt to open a new window
-    var newWindow = window.open("", "_blank");
-
-    // Check if the new window was blocked
-    if (newWindow === null || typeof newWindow === "undefined") {
-      popupBlockerEnabled = true;
-    }
-
-    // Close the new window if it was successfully opened
-    if (newWindow) {
-      newWindow.close();
-    }
-
-    // Now you can use the 'popupBlockerEnabled' variable to determine if popups are enabled or not
-    if (popupBlockerEnabled) {
-      toast('Please enabled redirects for entering username');
-    }
-  };
-
   const createWallet = async () => {
     setLoadingMessage("Creating your wallet...");
     setIsLoading(true);
@@ -228,7 +207,6 @@ const Home = () => {
     // }
 
     try {
-      checkPopUps();
       const walletInstance = await bananaWalletInstance.createWallet();
       setWallet(walletInstance);
       const address = await walletInstance.getAddress();
@@ -315,7 +293,7 @@ const Home = () => {
     <div className="container">
       <Space direction="vertical" style={{ width: "100%" }}>
         <Layout>
-          <Header style={headerStyle}>Welcome to Banana Wallet SDK</Header>
+          <Header style={headerStyle}>Welcome to Banana SDK</Header>
           <Toaster />
           <Loader isLoading={isLoading} message={loadingMessage}>
             <Content style={contentStyle}>
