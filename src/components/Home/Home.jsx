@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./Home.css";
 import { Layout, Space, Button, AutoComplete, Modal, Row, Col } from "antd";
 import WalletModal from "../Shared/Modal/Modal";
-import { Banana, Chains } from "@rize-labs/banana-wallet-demo-sdk";
+import { Banana, Chains } from "@rize-labs/banana-wallet-sdk";
 import Loader from "../Shared/Loader/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import { CopyToClipboard } from "react-copy-to-clipboard";
